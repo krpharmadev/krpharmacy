@@ -30,20 +30,21 @@ export default function ProfessionalRegistrationPage() {
         body: JSON.stringify({ licenseNumber, profession, documentUrl }),
       });
 
-      const data = await res.json()) {
+      const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || "เกิดข้อผิดพลาดในการลงทะเบียน");
       }
 
       setSuccess("ลงทะเบียนสำเร็จ รอการอนุมัติ");
-    } catch (err) {
+    } catch (err: any) {
       setError(err.message || "เกิดข้อผิดพลาด");
     }
   };
 
   return (
-    <div className="container mx-auto px-4 py-     <h1 className="text-2xl font-bold mb-6">ลงทะเบียนสำหรับบุคลากรทางการแพทย์</h1>
-      {error && <div className="text-red-4">}>{error}</div>}
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-2xl font-bold mb-6">ลงทะเบียนสำหรับบุคลากรทางการแพทย์</h1>
+      {error && <div className="text-red-500">{error}</div>}
       {success && <div className="text-green-600">{success}</div>}
       <form onSubmit={handleSubmit} className="max-w-md mx-auto">
         <div className="mb-4">
@@ -52,7 +53,7 @@ export default function ProfessionalRegistrationPage() {
             type="text"
             value={licenseNumber}
             onChange={(e) => setLicenseNumber(e.target.value)}
-            class="w-full p-2 border rounded"
+            className="w-full p-2 border rounded"
             required
           />
         </div>
@@ -61,8 +62,9 @@ export default function ProfessionalRegistrationPage() {
           <select
             value={profession}
             onChange={(e) => setProfession(e.target.value as "medical" | "pharmacist")}
-            class="w-full p-2 border rounded"
+            className="w-full p-2 border rounded"
             required
+          >
             <option value="medical">แพทย์/พยาบาล</option>
             <option value="pharmacist">เภสัชกร</option>
           </select>
@@ -73,12 +75,12 @@ export default function ProfessionalRegistrationPage() {
             type="text"
             value={documentUrl}
             onChange={(e) => setDocumentUrl(e.target.value)}
-            class="w-full p-2 border rounded"
+            className="w-full p-2 border rounded"
           />
         </div>
         <button
           type="submit"
-          class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
           ส่งคำขอลงทะเบียน
         </button>
