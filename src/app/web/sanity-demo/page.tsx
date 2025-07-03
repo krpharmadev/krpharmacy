@@ -2,9 +2,38 @@ import { sanityClient } from "@/sanity/lib/client";
 import { PRODUCT_QUERY, CATEGORIES_QUERY } from "@/sanity/lib/queries";
 
 export default async function SanityDemoPage() {
-  // ดึงข้อมูลจาก Sanity
-  const products = await sanityClient.fetch(PRODUCT_QUERY);
-  const categories = await sanityClient.fetch(CATEGORIES_QUERY);
+  let products: any[] = [];
+  let categories: any[] = [];
+  let error = null;
+
+  try {
+    // ดึงข้อมูลจาก Sanity พร้อม error handling
+    [products, categories] = await Promise.all([
+      sanityClient.fetch(PRODUCT_QUERY).catch(() => []),
+      sanityClient.fetch(CATEGORIES_QUERY).catch(() => [])
+    ]);
+  } catch (err) {
+    console.error('Error fetching Sanity data:', err);
+    error = err;
+  }
+
+  // ถ้าไม่มีข้อมูลหรือเกิด error ให้แสดงข้อความแจ้งเตือน
+  if (error || (products.length === 0 && categories.length === 0)) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-2xl font-bold mb-6">ตัวอย่างข้อมูลจาก Sanity</h1>
+        <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded">
+          <p className="font-bold">ไม่สามารถเชื่อมต่อกับ Sanity ได้</p>
+          <p>กรุณาตรวจสอบ:</p>
+          <ul className="list-disc list-inside mt-2">
+            <li>Environment variables สำหรับ Sanity</li>
+            <li>Project ID และ Dataset ที่ถูกต้อง</li>
+            <li>การเชื่อมต่ออินเทอร์เน็ต</li>
+          </ul>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">

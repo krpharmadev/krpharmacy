@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 export default function ProfessionalRegistrationPage() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [licenseNumber, setLicenseNumber] = useState("");
   const [profession, setProfession] = useState<"medical" | "pharmacist">("medical");
@@ -13,8 +13,17 @@ export default function ProfessionalRegistrationPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  if (!session) {
-    router.push("/web/login");
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/web/login");
+    }
+  }, [status, router]);
+
+  if (status === "loading") {
+    return <div className="container mx-auto px-4 py-8">กำลังโหลด...</div>;
+  }
+
+  if (status === "unauthenticated") {
     return null;
   }
 
