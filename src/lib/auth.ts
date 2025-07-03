@@ -11,6 +11,7 @@ import bcrypt from 'bcryptjs';
 import type { Adapter } from 'next-auth/adapters';
 import NextAuth from 'next-auth';
 import type { AccountTableType } from '@/types/next-auth';
+import { jwtDecode } from "jwt-decode";
 
 
 export const authOptions: NextAuthConfig = {
@@ -94,13 +95,14 @@ export const authOptions: NextAuthConfig = {
           const { idToken } = credentials as { idToken: string };
           if (!idToken) return null;
 
-          // TODO: ตรวจสอบ idToken กับ LINE API จริง ๆ ใน production
-          // ตัวอย่างนี้ mock ข้อมูล lineProfile
+          // Decode idToken จริงจาก LINE
+          const decoded: any = jwtDecode(idToken);
+          // LINE LIFF idToken จะมี sub เป็น userId
           const lineProfile = {
-            id: "line-user-id", // ดึงจาก idToken จริง
-            name: "LINE User",
-            email: "line-user@example.com", // อาจไม่มี
-            picture: "https://profile.line-scdn.net/profile-image.png"
+            id: decoded.sub, // ใช้ sub เป็น lineId จริง
+            name: decoded.name || "LINE User",
+            email: decoded.email,
+            picture: decoded.picture || decoded.pictureUrl
           };
 
           // ค้นหาผู้ใช้จาก LINE ID

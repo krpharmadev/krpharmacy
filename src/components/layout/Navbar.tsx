@@ -9,37 +9,8 @@ import { useScrollDetection } from "@/hooks/useScrollDetection";
 import { LoginModal } from "@/components/auth/LoginModal";
 //import LoginButton from '@/components/LoginButton';
 import { useAppContext } from "@/contexts/AppContext";
-
-// แยกส่วนของ NavLink ออกมาเป็น Component ย่อย
-const NavLink = ({ href, children, onClick, className = "" }: { 
-  href: string; 
-  children: React.ReactNode; 
-  onClick?: () => void; 
-  className?: string 
-}) => (
-  <Link 
-    href={href}
-    className={`hover:text-blue-600 ${className}`}
-    onClick={onClick}
-  >
-    {children}
-  </Link>
-);
-
-// แยกส่วนของ MobileNavLink ออกมาเป็น Component ย่อย
-const MobileNavLink = ({ href, children, onClick }: {
-  href: string;
-  children: React.ReactNode;
-  onClick?: () => void;
-}) => (
-  <Link 
-    href={href}
-    className="block px-3 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-md"
-    onClick={onClick}
-  >
-    {children}
-  </Link>
-);
+import { NavLink, MobileNavLink } from "@/components/layout/NavbarMenu";
+import { fetchCategories } from "@/sanity/lib/category";
 
 export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -48,7 +19,13 @@ export function Navbar() {
   const isScrolled = useScrollDetection({ threshold: 50 });
   const [cartCount, setCartCount] = useState(0);
   const { data: session, status } = useSession();
-  const { isSeller, router, user } = useAppContext();
+  const { isAdmin, router, user } = useAppContext();
+
+  // ดึงหมวดหมู่จาก Sanity
+  const [categories, setCategories] = useState<{ _id: string, name: string, slug: { current: string } }[]>([]);
+  useEffect(() => {
+    fetchCategories().then(setCategories);
+  }, []);
 
   // ปิดเมนูเมื่อคลิกนอกเมนู
   useEffect(() => {
@@ -127,14 +104,14 @@ export function Navbar() {
                   <ChevronDown className="ml-1 w-4 h-4" />
                 </button>
                 <div className="absolute left-0 invisible group-hover:visible opacity-0 group-hover:opacity-100 bg-white shadow-lg rounded-md mt-2 py-2 w-48 z-50 transition-all duration-200">
-                  {categoryMenus.map((menu) => (
+                  {categories.map((cat) => (
                     <NavLink
-                      key={menu.href}
-                      href={menu.href}
+                      key={cat._id}
+                      href={`/web/categories?category=${cat.slug.current}`}
                       onClick={() => setIsMobileMenuOpen(false)}
                       className="block px-4 py-2 hover:bg-blue-50"
                     >
-                      {menu.name}
+                      {cat.name}
                     </NavLink>
                   ))}
                 </div>
@@ -143,7 +120,14 @@ export function Navbar() {
               <NavLink href="/about">เกี่ยวกับเรา</NavLink>
               <NavLink href="/contact">ติดต่อเรา</NavLink>
             </div>
-            {isSeller() && <button onClick={() => router.push('/seller')} className="text-xs border px-4 py-1.5 rounded-full">Seller Dashboard</button>}
+            {isAdmin() && (
+              <button
+                onClick={() => router.push('/studio')}
+                className="text-xs border px-4 py-1.5 rounded-full"
+              >
+                Admin Dashboard
+              </button>
+            )}
             {/* <LoginButton /> */}
 
             {/* Right Side - User Menu, Cart */}

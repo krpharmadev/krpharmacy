@@ -74,14 +74,14 @@ export const useAppContext = () => {
 
   // เพิ่ม auth และ router logic
   const { user } = useUser()
-  const { isSeller } = useRole()
+  const { isAdmin } = useRole()
   const router = useRouter()
 
   return {
     ...context,
     // Auth-related properties
     user,
-    isSeller,
+    isAdmin,
     // Navigation
     router,
   }

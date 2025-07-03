@@ -9,11 +9,21 @@
 
 import { NextStudio } from 'next-sanity/studio'
 import config from '../../../../sanity.config'
+import Link from 'next/link'
 
 export const dynamic = 'force-static'
 
 export { metadata, viewport } from 'next-sanity/studio'
 
 export default function StudioPage() {
-  return <NextStudio config={config} />
+  return (
+    <>
+      <div className="p-4">
+        <Link href="/" className="inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors font-medium mb-4">
+          กลับหน้าหลัก
+        </Link>
+      </div>
+      <NextStudio config={config} />
+    </>
+  )
 }

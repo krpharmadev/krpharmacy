@@ -12,11 +12,11 @@ import Link from 'next/link'
 
 export default function WebHomePage() {
   return (
-    <main>
+    <main className="flex flex-col min-h-screen">
       <HeroSection />
 
       {/* Category Cards */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-gray-50 flex-grow">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">หมวดหมู่สินค้า</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-3xl mx-auto">
