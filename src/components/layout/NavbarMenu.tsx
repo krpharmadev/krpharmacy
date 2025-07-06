@@ -1,9 +1,32 @@
 "use client";
 
-import { headerData } from "@/constants/data";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
+
+// Header Navigation Data
+const headerData = [
+  {
+    title: "หน้าแรก",
+    href: "/",
+  },
+  {
+    title: "สินค้า",
+    href: "/web/products",
+  },
+  {
+    title: "หมวดหมู่",
+    href: "/web/categories",
+  },
+  {
+    title: "สั่งซื้อ",
+    href: "/web/order",
+  },
+  {
+    title: "ใบสั่งยา",
+    href: "/web/prescription",
+  },
+];
 
 const NavbarMenu = () => {
     const pathname = usePathname();
@@ -20,12 +43,12 @@ const NavbarMenu = () => {
         >
           {item?.title}
           <span
-            className={`absolute -bottom-0.5 left-1/2 w-0 h-0.5 bg-shop_light_green group-hover:w-1/2 hoverEffect group-hover:left-0 ${
+            className={`absolute -bottom-0.5 left-1/2 w-0 h-0.5 bg-shop_light_green hoverEffect group-hover:w-1/2 group-hover:left-0 ${
               pathname === item?.href && "w-1/2"
             }`}
           />
           <span
-            className={`absolute -bottom-0.5 right-1/2 w-0 h-0.5 bg-shop_light_green group-hover:w-1/2 hoverEffect group-hover:right-0 ${
+            className={`absolute -bottom-0.5 right-1/2 w-0 h-0.5 bg-shop_light_green hoverEffect group-hover:w-1/2 group-hover:right-0 ${
               pathname === item?.href && "w-1/2"
             }`}
           />

@@ -35,7 +35,7 @@ export function LocationCard({
   }, [])
 
   // สร้าง URL สำหรับ embed Google Maps
-  const mapSrc = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${latitude},${longitude}&zoom=16`
+  const mapSrc = `https://www.google.com/maps/embed/v1/place?key==${latitude},${longitude}&zoom=16`
 
   if (!showLocation) {
     return null
